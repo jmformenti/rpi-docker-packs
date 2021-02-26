@@ -1,0 +1,59 @@
+version: "2"
+
+services:
+
+  plex:
+    image: jaymoulin/plex:1.21.2.3943
+    expose:
+      - 32400
+      - 33400
+    hostname: plexpi
+    volumes:
+      - ${STORAGE}/Plex Media Server:/root/Library/Application Support/Plex Media Server
+      - ${MEDIA}:/media
+      - ${STORAGE}/tmp:/tmp
+    restart: unless-stopped
+    networks: 
+      lan:
+        ipv4_address: ${NETWORK_PLEX_IP}
+
+  transmission:
+    image : jaymoulin/transmission:3.00-1.6.1
+    user: "${UID}:${GID}"
+    command: transmission-daemon -f -g /config
+    volumes:
+      - ./transmission:/config
+      - ${STORAGE}/torrents:/downloads
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    expose:
+      - 9091
+    restart: unless-stopped
+
+  flexget:
+    build: flexget-arm
+    volumes:
+      - ./flexget:/config
+      - ${STORAGE}/torrents:/downloads
+      - ${MEDIA}:/storage
+    ports:
+      - 5050:5050
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - FG_WEBUI_PASSWD=${FLEXGET_PWD}
+    restart: unless-stopped
+    links:
+      - transmission
+
+networks:
+  lan:
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      config:
+        - subnet: ${NETWORK_SUBNET}
+          gateway: ${NETWORK_GATEWAY}

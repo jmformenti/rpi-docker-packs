@@ -1,0 +1,98 @@
+version: '3'
+
+services:
+  db:
+    image: mariadb
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: always
+    volumes:
+      - ${NEXTCLOUD_VOLUME}/mariadb:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    env_file:
+      - db.env
+
+  redis:
+    image: redis:alpine
+    restart: always
+
+  app:
+    image: nextcloud:fpm-alpine
+    restart: always
+    volumes:
+      - ${NEXTCLOUD_VOLUME}/nextcloud:/var/www/html
+    environment:
+      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
+      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
+      - NEXTCLOUD_TRUSTED_DOMAINS=""${WEB_VIRTUAL_HOST_EXTRA} ${WEB_VIRTUAL_HOST_INTRA}""
+      - MYSQL_HOST=db
+      - REDIS_HOST=redis
+    env_file:
+      - db.env
+    depends_on:
+      - db
+      - redis
+
+  web:
+    build: ./web
+    restart: always
+    volumes:
+      - ${NEXTCLOUD_VOLUME}/nextcloud:/var/www/html:ro
+    environment:
+      - VIRTUAL_HOST=${WEB_VIRTUAL_HOST_EXTRA},${WEB_VIRTUAL_HOST_INTRA}
+      - LETSENCRYPT_HOST=${WEB_VIRTUAL_HOST_EXTRA}
+      - LETSENCRYPT_EMAIL=${WEB_LETSENCRYPT_EMAIL}
+    depends_on:
+      - app
+    networks:
+      - proxy-tier
+      - default
+
+  cron:
+    build: ./cron
+    restart: always
+    volumes:
+      - ${NEXTCLOUD_VOLUME}/nextcloud:/var/www/html
+    entrypoint: /cron.sh
+    depends_on:
+      - db
+      - redis
+      - elasticsearch
+
+  proxy:
+    build: ./proxy
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    labels:
+      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+    volumes:
+      - ${NEXTCLOUD_VOLUME}/nginx-proxy/certs:/etc/nginx/certs:ro
+      - ${NEXTCLOUD_VOLUME}/nginx-proxy/vhost.d:/etc/nginx/vhost.d
+      - ${NEXTCLOUD_VOLUME}/nginx-proxy/html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - proxy-tier
+
+  letsencrypt-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    volumes:
+      - ${NEXTCLOUD_VOLUME}/nginx-proxy/certs:/etc/nginx/certs
+      - ${NEXTCLOUD_VOLUME}/nginx-proxy/vhost.d:/etc/nginx/vhost.d
+      - ${NEXTCLOUD_VOLUME}/nginx-proxy/html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - proxy-tier
+    depends_on:
+      - proxy
+
+  elasticsearch:
+    build: ./elasticsearch
+    restart: always
+    environment:
+      - discovery.type=single-node
+
+networks:
+  proxy-tier:

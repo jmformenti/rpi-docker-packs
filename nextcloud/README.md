@@ -54,26 +54,26 @@ docker-compose down
 Accessing from internet:
 
 https://host
-where `host` is your external dns name, i.e. ${WEB_VIRTUAL_HOST_EXTRA} parameter.
+where `host` is your external dns name, i.e. `WEB_VIRTUAL_HOST_EXTRA` parameter.
 
 ### From local network
 
 Accessing from inside your network:
 
 http://host
-where `host` is your raspberry IP, i.e. ${WEB_VIRTUAL_HOST_INTRA} parameter.
+where `host` is your raspberry IP, i.e. `WEB_VIRTUAL_HOST_INTRA` parameter.
  
 ## Configuring
 
 Once you have logged in nextcloud with the admin user, you can configure full-text search plugin:
 
 1. Activate full-text search plugin.
-	* Go to **Apps** and install: **Full text search**, **Full text search - Elasticsearch platform** and **Full text search - Files**.
-	* Go to **Settings** -> **Administration** -> **Full text search**.
-	* Select **Elasticsearch** from **Search Platform** drop-down.
-	* Fill in **Elastic Search** section:
-		* Address of the Servlet: http://elasticsearch:9200
-		* Index: a name (for example, my_index)
+	* Go to `Apps` and install: `Full text search`, `Full text search - Elasticsearch platform` and `Full text search - Files`.
+	* Go to `Settings` -> `Administration` -> `Full text search`.
+	* Select `Elasticsearch` from `Search Platform` drop-down.
+	* Fill in `Elastic Search` section:
+		* `Address of the Servlet`: `http://elasticsearch:9200`
+		* `Index`: a name (for example, my_index)
 	* That's all! to check the plugin, run:
 	```
 	docker exec -u www-data -it fpm_cron_1 ./occ fulltextsearch:check
@@ -91,6 +91,6 @@ docker exec -it -u www-data nextcloud_app_1 ./occ user:resetpassword <username>
 
 ### Use Collabora Online app
 
-You can use **Collabora Online** app from your own server using **Collabora Online - Built-in CODE server (ARM64)** but currently if you activated it, it is very likely that your nextcloud will become extremely slow.
+You can use `Collabora Online` app from your own server using `Collabora Online - Built-in CODE server (ARM64)` but currently if you activated it, it is very likely that your nextcloud will become extremely slow.
 
 To avoid that we need to wait that [this issue](https://github.com/nextcloud/richdocuments/issues/1282) be resolved.

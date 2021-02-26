@@ -54,14 +54,14 @@ docker-compose down
 Accessing from internet:
 
 https://host
-where `host` is your external IP, i.e. ${WEB_VIRTUAL_HOST_INTRA} parameter.
+where `host` is your external dns name, i.e. ${WEB_VIRTUAL_HOST_EXTRA} parameter.
 
 ### From local network
 
 Accessing from inside your network:
 
 http://host
-where `host` is your raspberry IP, i.e. ${WEB_VIRTUAL_HOST_EXTRA} parameter.
+where `host` is your raspberry IP, i.e. ${WEB_VIRTUAL_HOST_INTRA} parameter.
  
 ## Configuring
 

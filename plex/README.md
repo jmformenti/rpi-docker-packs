@@ -26,7 +26,7 @@ cd rpi-docker-packs/plex
 	* **UID**. User ID who runs the dockers (typically `pi` user, run `id -u pi`).
 	* **GID**. Group ID who runs the dockers (typically `pi` group, run `id -g pi`).
 	* **MEDIA**. Root directory where films, series, etc are saved.
-	* **STORAGE**. Root directory for torrents and temporal files. *Note*: Be sure that exists ``${STORAGE}/downloads/complete`` exists. 
+	* **STORAGE**. Root directory for torrents and temporal files. *Note*: Be sure that directory ``${STORAGE}/downloads/complete`` exists. 
 	* **NETWORK_SUBNET**. Configure your subnet (for example, 192.168.1.0/24).
 	* **NETWORK_GATEWAY**. Configure your gateway (for example, 192.168.1.1).
 	* **NETWORK_PLEX_IP**. Configure the IP to user for plex server (for example, 192.168.1.3).

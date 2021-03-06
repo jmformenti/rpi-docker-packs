@@ -13,9 +13,9 @@ passwd
 ```
 7. Configure timezone (for example, Europe/Andorra).
 ```
-timedatectl set-timezone Europe/Andorra
+sudo timedatectl set-timezone Europe/Andorra
 ```
-8. Configure static IP (for example, asigning 192.168.1.2 as ip in 192.168.1.* network):
+8. Configure static IP in ``/etc/dhcpcd.conf`` (for example, assigning 192.168.1.2 as IP in 192.168.1.* network):
 ```
 interface eth0
 static ip_address=192.168.1.2/24
@@ -24,7 +24,7 @@ static domain_name_servers=192.168.1.1
 ```
 9. Reboot and access via ssh using the new IP.
 ```
-reboot
+sudo reboot
 ```
 10. Update the system.
 ```
@@ -35,11 +35,15 @@ sudo apt upgrade
 ```
 sudo apt install docker docker-compose
 ```
-12. Add ``pi`` user to docker group.
+12. Reboot and access via ssh.
+```
+sudo reboot
+```
+13. Add ``pi`` user to docker group.
 ```
 sudo usermod -aG docker pi
 ```
-13. Enable and start docker service.
+14. Enable and start docker service.
 ```
 sudo systemctl enable --now docker.service
 ```

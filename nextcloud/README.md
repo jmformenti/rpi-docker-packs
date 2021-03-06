@@ -30,14 +30,15 @@ cd rpi-docker-packs/nextcloud
 	* **MYSQL_USER**. User for mariadb nextcloud database.
 	* **MYSQL_PASSWORD**. Password for mariadb nextcloud user.
 	* **MYSQL_DATABASE**. Database name for nextcloud.
-4. Activate full-text search plugin.
 
 ## Executing
 
-Once installed, just run this command (inside ``rpi-docker-packs/nextcloud`` dir) to start all containers:
+Once prepared, just run this command (inside ``rpi-docker-packs/nextcloud`` dir) to start all containers:
 ```
 docker-compose up -d
 ```
+**NOTE:** The first time it will take a while to get started and to be available the web.
+
 To stop all containers run:
 ```
 docker-compose stop
@@ -76,7 +77,7 @@ Once you have logged in nextcloud with the admin user, you can configure full-te
 		* `Index`: a name (for example, my_index)
 	* That's all! to check the plugin, run:
 	```
-	docker exec -u www-data -it fpm_cron_1 ./occ fulltextsearch:check
+	docker exec -u www-data -it nextcloud_cron_1 ./occ fulltextsearch:check
 	```
 	*Note*: a cron is already configured to index existing and new files.
 

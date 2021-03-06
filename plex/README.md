@@ -26,7 +26,7 @@ cd rpi-docker-packs/plex
 	* **UID**. User ID who runs the dockers (typically `pi` user, run `id -u pi`).
 	* **GID**. Group ID who runs the dockers (typically `pi` group, run `id -g pi`).
 	* **MEDIA**. Root directory where films, series, etc are saved.
-	* **STORAGE**. Root directory for torrents and temporal files.
+	* **STORAGE**. Root directory for torrents and temporal files. *Note*: Be sure that exists ``${STORAGE}/downloads/complete`` exists. 
 	* **NETWORK_SUBNET**. Configure your subnet (for example, 192.168.1.0/24).
 	* **NETWORK_GATEWAY**. Configure your gateway (for example, 192.168.1.1).
 	* **NETWORK_PLEX_IP**. Configure the IP to user for plex server (for example, 192.168.1.3).
@@ -34,9 +34,11 @@ cd rpi-docker-packs/plex
 3. Configure transmission password.
 	* Sets transmission password, `rpc-password` parameter in `transmission/settings.json` file.
 	* Sets transmission password in flexget, `transmission.pwd` parameter in `flexget/variables.yml` file.
-4. Configure flexget in `flexget/config.yml` as you need. Recommended:
+5. Configure flexget in `flexget/config.yml` as you need. Recommended:
 	* Add your series in `templates.tv.series.tv`.
 	* Add your torrent feeds in `tasks`.
+
+   **NOTE**: Optional step, you can configure flexget later.
 
 ## Executing
 

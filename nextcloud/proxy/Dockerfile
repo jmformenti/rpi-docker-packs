@@ -34,6 +34,8 @@ COPY network_internal.conf /etc/nginx/
 
 COPY timeout.conf /etc/nginx/conf.d/
 
+COPY uploadsize.conf /etc/nginx/conf.d/
+
 WORKDIR /app/
 
 ENV DOCKER_HOST unix:///tmp/docker.sock

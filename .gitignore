@@ -1,0 +1,8 @@
+plex/flexget/.config-lock
+plex/flexget/db-config-jobs.sqlite
+plex/flexget/db-config.sqlite
+plex/flexget/flexget.log
+plex/transmission/dht.dat
+plex/transmission/resume/
+plex/transmission/stats.json
+plex/transmission/torrents/

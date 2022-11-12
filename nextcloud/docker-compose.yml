@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    image: mariadb
+    image: mariadb:10.5
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     restart: always
     volumes:
@@ -17,10 +17,11 @@ services:
     restart: always
 
   app:
-    image: nextcloud:fpm-alpine
+    image: nextcloud:24.0.7-fpm-alpine
     restart: always
     volumes:
       - ${NEXTCLOUD_VOLUME}/nextcloud:/var/www/html
+      - /srv/carabassa/all/image:/srv/media/photos
     environment:
       - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
       - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
@@ -76,13 +77,16 @@ services:
       - proxy-tier
 
   letsencrypt-companion:
-    image: jrcs/letsencrypt-nginx-proxy-companion
+    image: nginxproxy/acme-companion
     restart: always
     volumes:
       - ${NEXTCLOUD_VOLUME}/nginx-proxy/certs:/etc/nginx/certs
+      - ${NEXTCLOUD_VOLUME}/nginx-proxy/acme:/etc/acme.sh
       - ${NEXTCLOUD_VOLUME}/nginx-proxy/vhost.d:/etc/nginx/vhost.d
       - ${NEXTCLOUD_VOLUME}/nginx-proxy/html:/usr/share/nginx/html
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - DEBUG=0
     networks:
       - proxy-tier
     depends_on:

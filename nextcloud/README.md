@@ -89,6 +89,19 @@ If at any time you lose the admin password, you can perform a reset by running:
 ```
 docker exec -it -u www-data nextcloud_app_1 ./occ user:resetpassword <username>
 ```
+### Trusted domain issue
+
+When you get an error about trusted domain when you access your nextcloud, then you have to add your ip/dns name to the config.
+
+First check trusted domains already configured:
+```
+docker exec -it -u www-data nextcloud_app_1 ./occ config:system:get trusted_domain
+```
+To add a new trusted domain:
+```
+docker exec -it -u www-data nextcloud_app_1 ./occ config:system:set trusted_domains <position> --value=192.168.1.2
+```
+where <position> is the position inside trusted domains list.
 
 ### Use Collabora Online app
 

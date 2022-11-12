@@ -78,7 +78,15 @@ Check logs to see the problem.
 ```
 docker logs plex_flexget_1
 ```
-If you see this error "Password 'XXXXX' is not strong enough. Suggestions: Add another word or two. Uncommon words are better." try to put a more complex password.
+Possible errors:
+ * `Password 'XXXXX' is not strong enough. Suggestions: Add another word or two. Uncommon words are better.`, try to put a more complex password.
+ * `CRITICAL manager                       [/tasks/sort_movies/filesystem/path] /downloads/complete does not exist
+    CRITICAL manager                       [/tasks/sort_tv/filesystem/path] /downloads/complete does not exist`, you have to create downloads paths.
+
+### Flexget is not moving downloaded files
+When flexget is not moving your downloaded films or series, check that:
+ * Downloaded files have extensions avi, mkv or mp4 (configured in `flexget/config.yml`).
+ * Flexget is able (or not) to get metainfo of your downloaded file watching the logs (`docker logs plex_flexget_1`).
 
 ### Avoid online transcode video
 
